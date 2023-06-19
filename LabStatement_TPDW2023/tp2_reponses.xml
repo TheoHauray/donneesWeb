@@ -1,0 +1,103 @@
+Step 1: Exploring the instance [XPath]
+
+the official names (country_name/offic_name) of the countries
+$x("//country_name/offic_name/text()")
+100: #text "Hungary"​​
+101: #text "Republic of Indonesia"​​
+102: #text "Isle of Man"​​
+103: #text "Republic of India"​​
+104: #text "British Indian Ocean Territory"​​
+105: #text "Republic of Ireland"​​
+106: #text "Islamic Republic of Iran
+
+
+the latitude of each country
+$x("//coordinates/@lat")
+0: lat="12.5"
+1: lat="33"
+2: lat="-12.5"
+3: lat="18.25"
+4: lat="60.116667"
+5: lat="41"
+
+the area of each country
+$x("//country/@area/text()")
+0: area="180"
+1: area="652230"
+2: area="1246700"
+3: area="91"
+4: area="1580"
+5: area="28748"
+
+the official names of European countries (continent = Europe)
+$x("//country[infosContinent/continent='Europe']/country_name/offic_name/text()")
+0: #text "Åland Islands"​
+1: #text "Republic of Albania"​
+2: #text "Principality of Andorra"​
+3: #text "Republic of Austria"​
+4: #text "Kingdom of Belgium"
+
+the common names of countries that do not have any native name
+$x("//country_name[not(native_name)]/common_name/text()")
+0: #text "Antarctica"
+
+the official names of the countries expressed in French, for those who have such names
+$x("//country[country_name/native_name[@lang='fra']]/country_name/offic_name/text()") 
+0: #text "Territory of the French Southern and Antarctic Lands"​
+1: #text "Republic of Burundi"​
+2: #text "Kingdom of Belgium"​
+3: #text "Republic of Benin"​
+4: #text "Burkina Faso"
+
+
+elements with at least one attribute
+$x("//*[attribute::*]")
+0: <country area="180">​​
+1: <native_name lang="nld">​​
+2: <native_name lang="pap">​​
+3: <coordinates lat="12.5" long="-69.96666666">
+
+official names of the second native name of countries (for those who have)
+$x("//country_name[count(native_name) >= 2]/native_name[2]/common_name/text()") 
+0: #text "Aruba"​
+1: #text "افغانستان"​
+2: #text "Argentina"​
+3: #text "Армения"​
+4: #text "Sāmoa Amelika"
+
+the sum of the surfaces (area) of the countries of Africa
+$x("sum(//country[infosContinent/continent='Africa']/@area)") 
+30318023
+
+countries whose common name is not contained in their official name
+$x("//country[not(contains(country_name/offic_name, country_name/common_name))]/country_name/offic_name/text()") 
+0: #text "Argentine Republic"​
+1: #text "Swiss Confederation"​
+2: #text "Republic of Côte d'Ivoire"​
+3: #text "Democratic Republic of the Congo"​
+4: #text "Republic of Cabo Verde"
+
+France's last neighbor
+$x("//country[country_name/common_name='France']/borders/neighbour[position() = last()]/text()")
+0: #text "CHE"
+
+the position of France in the XML document
+$x("count(//country[country_name/common_name = 'France']/preceding-sibling::country) + 1")
+75
+
+Step 2: Instance update [XML, DTD]
+Some child elements of the element country are indicated with a minimum occurrence of 0 (*) whereas they are present everywhere. Find them and modify the DTD accordingly. Give the modified definition of their parent elements. Use XPath functions to check for the presence of these elements
+
+$x("/countries/country[not(tld)]/country_name/common_name/text()") 
+$x("/countries/country[not(currency)]/country_name/common_name/text()")
+$x("/countries/country[not(callingCode)]/country_name/common_name/text()")
+$x("/countries/country[not(altSpellings)]/country_name/common_name/text()")
+$x("/countries/country[not(infosContinent)]/country_name/common_name/text()")
+$x("/countries/country[not(languages)]/country_name/common_name/text()")
+$x("/countries/country[not(coordinates)]/country_name/common_name/text()")
+$x("/countries/country[not(borders)]/country_name/common_name/text()")
+
+<!ELEMENT country (country_name,tld*,country_codes,currency*,callingCode*,
+                   capital,altSpellings+, infosContinent+,languages+,
+                   coordinates*,demonym,landlocked,borders*)>
+
