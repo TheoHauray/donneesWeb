@@ -43,32 +43,29 @@ function bouton3_1(codePays) {
   }
 }
 
-
 function afficheSVG(svgDocumentUrl) {
+  //Document svgXML
+  var svgDocument = chargerHttpXML(svgDocumentUrl);
 
-    //Document svgXML
-    var svgDocument = chargerHttpXML(svgDocumentUrl);
+  var svg = new XMLSerializer().serializeToString(svgDocument);
 
-    var svg = new XMLSerializer().serializeToString(svgDocument);
-
-    //Element parent
-    var elementHtmlParent = window.document.getElementById("resultats");
-    elementHtmlParent.innerHTML = svg;
+  //Element parent
+  var elementHtmlParent = window.document.getElementById("resultats");
+  elementHtmlParent.innerHTML = svg;
 }
 
 function afficheSVGCliquable(svgDocumentUrl, baliseAffichage) {
+  afficheSVG(svgDocumentUrl);
 
-    afficheSVG(svgDocumentUrl);
+  var elementHtmlParent = window.document.getElementById("resultats");
+  var elementHtmlTextResult = window.document.getElementById("texte_resultats");
+  var paths = elementHtmlParent.getElementsByTagName("g")[0].children;
 
-    var elementHtmlParent = window.document.getElementById("resultats");
-    var elementHtmlTextResult = window.document.getElementById("texte_resultats");
-    var paths = elementHtmlParent.getElementsByTagName("g")[0].children;
-
-    Array.from(paths).forEach(function (element) {
-        element.addEventListener('click', function (event) {
-            elementHtmlTextResult.innerHTML = element.getAttribute(baliseAffichage);
-        });
+  Array.from(paths).forEach(function (element) {
+    element.addEventListener("click", function (event) {
+      elementHtmlTextResult.innerHTML = element.getAttribute(baliseAffichage);
     });
+  });
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,22 +129,21 @@ function chargerHttpJSON(jsonDocumentUrl) {
 }
 
 function chargerHttpXML(xmlDocumentUrl) {
+  var httpAjax;
 
-    var httpAjax;
+  httpAjax = window.XMLHttpRequest
+    ? new XMLHttpRequest()
+    : new ActiveXObject("Microsoft.XMLHTTP");
 
-    httpAjax = window.XMLHttpRequest ?
-        new XMLHttpRequest() :
-        new ActiveXObject('Microsoft.XMLHTTP');
+  if (httpAjax.overrideMimeType) {
+    httpAjax.overrideMimeType("text/xml");
+  }
 
-    if (httpAjax.overrideMimeType) {
-        httpAjax.overrideMimeType('text/xml');
-    }
+  //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3e parametre est défini à false)
+  httpAjax.open("GET", xmlDocumentUrl, false);
+  httpAjax.send();
 
-    //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3e parametre est défini à false)
-    httpAjax.open('GET', xmlDocumentUrl, false);
-    httpAjax.send();
-
-    return httpAjax.responseXML;
+  return httpAjax.responseXML;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,12 +272,46 @@ function makeWorldMapClickable() {
   // Get the reference to the SVG element
   const svgElement = document.getElementById("svg-world-map");
   const countries = svgElement.getElementsByTagName("path"); // Replace 'rect' with the desired tag name
+  const countryName = document.getElementById("countryName");
 
   for (var i = 0; i < countries.length; i++) {
     console.log(countries[i]);
     countries[i].addEventListener("click", (element) => {
       console.log(element.target.getAttribute("countryname"));
-      //   console.log(element.getAttribute("countryName"));
+      countryName.innerHTML = element.target.getAttribute("countryname");
+    });
+  }
+}
+
+function hoverCountries() {
+  // Get the reference to the SVG element
+  const svgElement = document.getElementById("svg-world-map");
+  const countries = svgElement.getElementsByTagName("path"); // Replace 'rect' with the desired tag name
+
+  // Chargement du fichier XSL � l'aide de XMLHttpRequest synchrone
+  var xslDocument = chargerHttpXML(xslDocumentUrl);
+
+  //cr�ation d'un processuer XSL
+  var xsltProcessor = new XSLTProcessor();
+
+  // Importation du .xsl
+  xsltProcessor.importStylesheet(xslDocument);
+
+  //passage du param�tre � la feuille de style
+  xsltProcessor.setParameter("", "param_ref_type", paramXSL_type_reference);
+
+  // Chargement du fichier XML � l'aide de XMLHttpRequest synchrone
+  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+
+  // Cr�ation du document XML transform� par le XSL
+  var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
+
+  for (var i = 0; i < countries.length; i++) {
+    countries[i].addEventListener("mouseover", (element) => {
+      element.target.style.fill = "red";
+    });
+    countries[i].addEventListener("mouseout", (element) => {
+      element.target.style.fill = "grey";
     });
   }
 }
