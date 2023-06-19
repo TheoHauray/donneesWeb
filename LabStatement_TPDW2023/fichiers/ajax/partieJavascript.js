@@ -1,3 +1,48 @@
+function bouton1() {
+    // Change la couleur de l'arrière-plan de la page en bleu
+    document.body.style.backgroundColor = 'blue';
+
+    // Change la couleur des boutons en blanc
+    var boutons = document.getElementsByTagName('input');
+    for (var i = 0; i < boutons.length; i++) {
+        boutons[i].style.color = 'white';
+    }
+}
+
+function bouton2() {
+    // Rétablit la couleur de l'arrière-plan de la page par défaut
+    document.body.style.backgroundColor = '';
+
+    // Rétablit la couleur des boutons par défaut
+    var boutons = document.getElementsByTagName('input');
+    for (var i = 0; i < boutons.length; i++) {
+        boutons[i].style.color = '';
+    }
+}
+
+//Affiche le nom officiel du pays et la capitale dont le code est saisie.
+function bouton3_1(codePays) {
+
+    var nomPays = "Le code saisie ne correspond à aucun pays."; // Si le code n'existe pas
+
+    var xmlDocument = chargerHttpXML("../countriesTP.xml");
+    var countries = xmlDocument.getElementsByTagName("country");
+
+    for (i = 0; i < countries.length; i++) {
+        var code = countries[i].getElementsByTagName("cca2");
+
+        if (code.innerHTML == codePays) {
+            country_name = countries[i].getElementsByTagName("country_name");
+            nomPays = "Pays : " + recupererPremierEnfantDeTypeNode(country_name[0]).innerHTML;
+
+            the_capital = countries[i].getElementsByTagName("the_capital")[0].innerHTML;
+            nomPays += "<br>Capitale : " + the_capital;
+            break;//On quitte la boucle pour éviter de faire des tests inutiles
+        }
+    }
+    window.document.getElementById("texte_resultats").innerHTML = nomPays;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function recupererPremierEnfantDeTypeElement(n) {
@@ -147,4 +192,12 @@ function Bouton4_ajaxBibliographieAvecParametres(xmlDocumentUrl, xslDocumentUrl,
 function Bouton4_ajaxEmployeesTableau(xmlDocumentUrl, xslDocumentUrl) {
     //commenter la ligne suivante qui affiche la bo�te de dialogue!
     alert("Fonction � compl�ter...");
+}
+
+function recupererPremierEnfantDeTypeNode(n) {
+    var x = n.firstChild;
+    while (x.nodeType != 1) { // Test if x is an element node (and not a text node or other)
+        x = x.nextSibling;
+    }
+    return x;
 }

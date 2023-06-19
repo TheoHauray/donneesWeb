@@ -2,7 +2,7 @@
 
 <head>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TP 3IF Ajax</title>
     <meta name="author" content="El�d EGYED-ZSIGMOND">
 
@@ -10,7 +10,33 @@
 
 </head>
 
-<body <p>Fichier � modifier/comp�lter</p>
+
+
+
+<body>
+    <h1>TP - Partie AJAX</h1>
+    <h2>HAURAY Théo et GARROT Gabin</h2>
+
+    <p>
+        <b>Bouton 1</b> : Arrière plan de la page en bleu et couleur du texte des boutons en blanc<br>
+        <input name="bouton1" type="button" id="mybouton1" onClick="bouton1();" value="1. Modification des couleurs" />
+    </p>
+
+    <p>
+        <b>Bouton 2</b> : remet les couleurs par défaut.<br>
+        <input name="bouton2" type="button" id="mybouton2" onClick="bouton2();"
+            value="2. Rétablissement des couleurs" />
+    </p>
+
+    <p>
+        <b>Bouton 3.1</b> : affiche pays et capitale<br>
+        <input name="bouton3_1" type="button" id="mybouton3_1"
+            onClick="bouton3_1(document.getElementById('myTexte1').value.toUpperCase());" value="3.1." />
+        <input list="text_1_cca2s_datalist" onkeyup="bouton3_autocompletion(document.getElementById('myTexte1'), document.getElementById('text_1_cca2s_datalist'))" name="texte1" type="text" id="myTexte1" value="" />
+        <datalist id="text_1_cca2s_datalist"></datalist>
+    </p>
+
+    <p>Fichier � modifier/comp�lter</p>
     <p>
         Remplace le texte "LES NOMS" avec le contenu du champ de saisi: <br/>
 		<input name="button" type="button" id="myButton1" onClick="setNom(document.getElementById('myText1').value);" value="1. AJAX simple" />
@@ -48,7 +74,6 @@
     <div id="id_element_a_remplacer">
         <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
     </div>
-
 
 </body>
 
