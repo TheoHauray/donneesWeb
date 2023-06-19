@@ -43,6 +43,34 @@ function bouton3_1(codePays) {
     window.document.getElementById("texte_resultats").innerHTML = nomPays;
 }
 
+
+function afficheSVG(svgDocumentUrl) {
+
+    //Document svgXML
+    var svgDocument = chargerHttpXML(svgDocumentUrl);
+
+    var svg = new XMLSerializer().serializeToString(svgDocument);
+
+    //Element parent
+    var elementHtmlParent = window.document.getElementById("resultats");
+    elementHtmlParent.innerHTML = svg;
+}
+
+function afficheSVGCliquable(svgDocumentUrl, baliseAffichage) {
+
+    afficheSVG(svgDocumentUrl);
+
+    var elementHtmlParent = window.document.getElementById("resultats");
+    var elementHtmlTextResult = window.document.getElementById("texte_resultats");
+    var paths = elementHtmlParent.getElementsByTagName("g")[0].children;
+
+    Array.from(paths).forEach(function (element) {
+        element.addEventListener('click', function (event) {
+            elementHtmlTextResult.innerHTML = element.getAttribute(baliseAffichage);
+        });
+    });
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function recupererPremierEnfantDeTypeElement(n) {
@@ -103,6 +131,24 @@ function chargerHttpJSON(jsonDocumentUrl) {
     return responseData;
 }
 
+function chargerHttpXML(xmlDocumentUrl) {
+
+    var httpAjax;
+
+    httpAjax = window.XMLHttpRequest ?
+        new XMLHttpRequest() :
+        new ActiveXObject('Microsoft.XMLHTTP');
+
+    if (httpAjax.overrideMimeType) {
+        httpAjax.overrideMimeType('text/xml');
+    }
+
+    //chargement du fichier XML à l'aide de XMLHttpRequest synchrone (le 3e parametre est défini à false)
+    httpAjax.open('GET', xmlDocumentUrl, false);
+    httpAjax.send();
+
+    return httpAjax.responseXML;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Bouton2_ajaxEmployees(xmlDocumentUrl) {

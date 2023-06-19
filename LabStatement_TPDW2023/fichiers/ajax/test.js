@@ -113,7 +113,6 @@ function afficheSVGCliquable(svgDocumentUrl, baliseAffichage) {
             elementHtmlTextResult.innerHTML = element.getAttribute(baliseAffichage);
         });
     });
-
 }
 
 //Réponses à la question 9, et ajouts pour les questions 11 et 13.

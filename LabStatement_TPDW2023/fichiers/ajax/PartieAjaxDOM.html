@@ -36,6 +36,18 @@
         <datalist id="text_1_cca2s_datalist"></datalist>
     </p>
 
+    <p>
+        <b>Bouton 4</b> : chargement de l'image exemple.svg.<br>
+        <input name="bouton4" type="button" id="mybouton4" onClick="afficheSVG('exemple.svg');"
+            value="4. Chargement de l'image SVG" />
+    </p>
+
+    <p>
+        <b>Bouton 5</b> : exemple.svg cliquable.<br>
+        <input name="bouton5" type="button" id="mybouton5" onClick="afficheSVGCliquable('exemple.svg', 'title');"
+            value="5. SVG cliquable" />
+    </p>
+
     <p>Fichier � modifier/comp�lter</p>
     <p>
         Remplace le texte "LES NOMS" avec le contenu du champ de saisi: <br/>
@@ -75,6 +87,12 @@
         <p style="color: red; font-weight: bold;">Cet &eacute;l&eacute;ment va &ecirc;tre remplac&eacute; par une bibliographie en XML mise en forme par une feuille de style XSLT...</p>
     </div>
 
+    <hr>
+    <div id="texte_resultats" style="height: 90px;"></div>
+    <div id="resultats" style="width: 90%;"></div>
+    <hr>
+    
+    
 </body>
 
 </html>
