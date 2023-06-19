@@ -35,7 +35,7 @@ function bouton3(codePays) {
         countries[i].getElementsByTagName("common_name")[0].innerHTML;
       the_capital = countries[i].getElementsByTagName("capital")[0].innerHTML;
       var concatPaysCapital =
-        "<p> Pays : " + country_name + ", capitale : " + the_capital + "</p>";
+        "<p> " + country_name + ", capitale : " + the_capital + "</p>";
       window.document.getElementById("result-find-country").innerHTML =
         concatPaysCapital;
       break; //On quitte la boucle pour éviter de faire des tests inutiles
@@ -70,10 +70,11 @@ function afficheSVGCliquable(svgDocumentUrl, baliseAffichage) {
   });
 }
 
-
 function showRandomCountry() {
   var xmlDocument = chargerHttpXML("../../countriesTP.xml");
   var countries = xmlDocument.getElementsByTagName("country");
+  var resultCountryToGuess = document.getElementById("result_country_to_guess");
+  resultCountryToGuess.textContent = "";
 
   // Sélectionne un pays aléatoire
   var randomIndex = Math.floor(Math.random() * countries.length);
@@ -81,7 +82,7 @@ function showRandomCountry() {
   var countryName = country.getElementsByTagName("common_name")[0].innerHTML;
 
   // Affiche le nom du pays
-  document.getElementById("countryName").textContent = "Pays : " + countryName;
+  document.getElementById("country_to_guess").textContent = countryName;
 
   // Rend la carte cliquable
   makeWorldMapClickable();
@@ -95,7 +96,13 @@ function showRandomCountry() {
     var result = clickedCountry === countryCode;
 
     // Affiche le résultat
-    document.getElementById("result").textContent = result ? "True" : "False";
+    resultCountryToGuess.textContent = result ? "True" : "False";
+
+    if (result == true) {
+      resultCountryToGuess.style.color = "green";
+    } else {
+      resultCountryToGuess.style.color = "red";
+    }
   };
 }
 

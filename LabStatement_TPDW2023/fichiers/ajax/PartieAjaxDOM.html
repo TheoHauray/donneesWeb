@@ -102,7 +102,6 @@
         />
     </p>
 
-
     <p>
       <b>Bouton 12</b> : Afficher un nom de pays aléatoire et cliquer sur le pays correspondant sur la carte<br>
       <input
@@ -112,17 +111,14 @@
         onClick="showRandomCountry();"
         value="12. Afficher un pays aléatoire"
       />
-    </p>
-    
-    <svg id="svg-world-map" width="100%" height="100%" viewBox="0 0 1200 800"></svg>
-    <div id="countryName" style="color: red;"></div>
-    <div id="result" style="color: green;"></div>
-    
+    </p>    
     
     <div style="display: block;align-items: baseline;">
         <div id="table-country-desc"></div>
         <br>
-        <div id="countryName" style="color: red;"></div>
+        <p>Nom du pays cliqué : <span id="countryName" style="color: red;"></span></p>
+        <p>Nom du pays à deviner : <span id="country_to_guess" style="color: red;"></span></p>
+        <p>Résultat pays à deviner : <div id="result_country_to_guess" style="color: green;"></div></p>
         <br>
         <svg id="svg-world-map" width="100%" height="100%" viewBox="0 0 1200 800"></svg>    
         <div id="texte_resultats" style="height: 90px;"></div>
