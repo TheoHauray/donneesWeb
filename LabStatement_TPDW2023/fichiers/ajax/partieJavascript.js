@@ -1,3 +1,5 @@
+// Gabin GARROT, Théo HAURAY
+
 function bouton1() {
   // Change la couleur de l'arrière-plan de la page en bleu
   document.body.style.backgroundColor = "blue";
@@ -21,9 +23,7 @@ function bouton2() {
 }
 
 //Affiche le nom officiel du pays et la capitale dont le code est saisie.
-function bouton3_1(codePays) {
-  var nomPays = "Le code saisie ne correspond à aucun pays."; // Si le code n'existe pas
-
+function bouton3(codePays) {
   var xmlDocument = chargerHttpXML("../../countriesTP.xml");
   var countries = xmlDocument.getElementsByTagName("country");
 
@@ -41,6 +41,8 @@ function bouton3_1(codePays) {
       break; //On quitte la boucle pour éviter de faire des tests inutiles
     }
   }
+
+  langues(codePays);
 }
 
 function afficheSVG(svgDocumentUrl) {
@@ -84,26 +86,6 @@ function setNom(nom) {
   var elementHtmlARemplir =
     window.document.getElementById("id_nom_a_remplacer");
   elementHtmlARemplir.innerHTML = nom;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//charge le fichier XML se trouvant � l'URL relative donn� dans le param�treet le retourne
-function chargerHttpXML(xmlDocumentUrl) {
-  var httpAjax;
-
-  httpAjax = window.XMLHttpRequest
-    ? new XMLHttpRequest()
-    : new ActiveXObject("Microsoft.XMLHTTP");
-
-  if (httpAjax.overrideMimeType) {
-    httpAjax.overrideMimeType("text/xml");
-  }
-
-  //chargement du fichier XML � l'aide de XMLHttpRequest synchrone (le 3� param�tre est d�fini � false)
-  httpAjax.open("GET", xmlDocumentUrl, false);
-  httpAjax.send();
-
-  return httpAjax.responseXML;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,8 +270,35 @@ function hoverCountries() {
   const svgElement = document.getElementById("svg-world-map");
   const countries = svgElement.getElementsByTagName("path"); // Replace 'rect' with the desired tag name
 
+  for (var i = 0; i < countries.length; i++) {
+    countries[i].addEventListener("mouseover", (element) => {
+      var idPays = element.target.id;
+      element.target.style.fill = "red";
+
+      //   Create the table and populate it
+      populateCountryTable(element.target.id);
+
+      //   Get the monnaie and populate column
+      fetch("https://restcountries.com/v2/alpha/" + idPays.toLowerCase())
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          window.document.getElementById("monnaie").innerHTML =
+            data.currencies[0].name;
+        });
+    });
+
+    countries[i].addEventListener("mouseout", (element) => {
+      element.target.style.fill = "grey";
+    });
+  }
+}
+
+function populateCountryTable(id) {
+  console.log(id);
   // Chargement du fichier XSL � l'aide de XMLHttpRequest synchrone
-  var xslDocument = chargerHttpXML(xslDocumentUrl);
+  var xslDocument = chargerHttpXML("affichePays.xsl");
 
   //cr�ation d'un processuer XSL
   var xsltProcessor = new XSLTProcessor();
@@ -298,20 +307,87 @@ function hoverCountries() {
   xsltProcessor.importStylesheet(xslDocument);
 
   //passage du param�tre � la feuille de style
-  xsltProcessor.setParameter("", "param_ref_type", paramXSL_type_reference);
+  xsltProcessor.setParameter("", "cca2", id);
 
   // Chargement du fichier XML � l'aide de XMLHttpRequest synchrone
-  var xmlDocument = chargerHttpXML(xmlDocumentUrl);
+  var xmlDocument = chargerHttpXML("../../countriesTP.xml");
+
+  console.log(xmlDocument);
 
   // Cr�ation du document XML transform� par le XSL
   var newXmlDocument = xsltProcessor.transformToDocument(xmlDocument);
 
-  for (var i = 0; i < countries.length; i++) {
-    countries[i].addEventListener("mouseover", (element) => {
-      element.target.style.fill = "red";
-    });
-    countries[i].addEventListener("mouseout", (element) => {
-      element.target.style.fill = "grey";
-    });
+  // Recherche du parent (dont l'id est "here") de l'�l�ment � remplacer dans le document HTML courant
+  var elementHtmlParent = window.document.getElementById("table-country-desc");
+
+  var serializer = new XMLSerializer();
+  var str = serializer.serializeToString(newXmlDocument);
+
+  // ins�rer l'�lement transform� dans la page html
+  elementHtmlParent.innerHTML = str;
+}
+
+function populateDataList() {
+  var xmlDocument = chargerHttpXML("../../countriesTP.xml");
+  var cca2s = xmlDocument.getElementsByTagName("cca2");
+  var datalistHtml = ``;
+
+  var cca2Input = document.getElementById("cca2_input");
+  var datalistElement = document.getElementById("cca2_list");
+
+  for (i = 0; i < cca2s.length; i++) {
+    if (cca2s[i].innerHTML.includes(cca2Input.value.toUpperCase())) {
+      datalistHtml += `<option value="${cca2s[i].innerHTML}"</option>`;
+    }
   }
+  datalistElement.innerHTML = datalistHtml;
+}
+
+//Affiche les pays dont la/les langue(s) parlée(s) est/sont la/les même(s) que le pays sélectionné.
+function langues(codePays) {
+  //Document XML
+  var xmlDocument = chargerHttpXML("../../countriesTP.xml");
+
+  //Langues du pays sélectionné
+  var pathLanguages =
+    "//country[country_codes/cca2 ='" + codePays + "' ]/languages";
+  var langues = xmlDocument
+    .evaluate(pathLanguages, xmlDocument, null, XPathResult.ANY_TYPE, null)
+    .iterateNext().children;
+  var languesPays = [];
+  for (i = 0; i < langues.length; i++) {
+    languesPays.push(langues[i].innerHTML);
+  }
+  console.log("resultat_nom", languesPays);
+
+  var pathCountries = "//countries";
+  var countries = xmlDocument
+    .evaluate(pathCountries, xmlDocument, null, XPathResult.ANY_TYPE, null)
+    .iterateNext().children;
+
+  var paysMemeLangue = [];
+
+  Array.from(countries).forEach((country) => {
+    balisesLanguages = country.getElementsByTagName("languages");
+    if (balisesLanguages.length > 0) {
+      var tempLang = [];
+      Array.from(balisesLanguages[0].children).forEach((langueN) => {
+        tempLang.push(langueN.innerHTML);
+      });
+
+      //intersection des 2 tableaux
+      if (languesPays.filter((x) => tempLang.includes(x)).length > 0) {
+        paysMemeLangue.push(country.getElementsByTagName("cca2")[0].innerHTML);
+      }
+    }
+  });
+
+  var elementHtmlParent = window.document.getElementById("svg-world-map");
+  var paths = elementHtmlParent.getElementsByTagName("g")[0].children;
+
+  Array.from(paths).forEach(function (element) {
+    if (paysMemeLangue.includes(element.getAttribute("id"))) {
+      element.style.fill = "green";
+    }
+  });
 }

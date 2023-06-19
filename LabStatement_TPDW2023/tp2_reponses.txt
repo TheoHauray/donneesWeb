@@ -1,3 +1,5 @@
+Gabin GARROT, Théo HAURAY
+
 Step 1: Exploring the instance [XPath]
 
 the official names (country_name/offic_name) of the countries

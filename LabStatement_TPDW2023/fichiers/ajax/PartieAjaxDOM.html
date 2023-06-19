@@ -2,9 +2,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>TP 3IF Ajax</title>
-    <meta name="author" content="El�d EGYED-ZSIGMOND" />
+    <meta name="author" content="Gabin GARROT, Théo HAURAY" />
 
-    <script type="text/javascript" src="partieJavascript.js"></script>
+    <script type="text/javascript" src="partieJavascript.js">
+        document.addEventListener("DOMContentLoaded", populateDataList());
+    </script>
   </head>
 
   <body>
@@ -35,23 +37,24 @@
     </p>
 
     <p>
-      <b>Bouton 3.1</b> : affiche pays et capitale<br />
+      <b>Bouton 3</b> : affiche pays et capitale + pays parlant la même langue (si carte affichée)<br />
       <input
-        name="bouton3_1"
+        name="bouton3"
         type="button"
-        id="mybouton3_1"
-        onClick="bouton3_1(document.getElementById('myTexte1').value.toUpperCase());"
-        value="3.1."
+        id="mybouton3"
+        onClick="bouton3(document.getElementById('cca2_input').value.toUpperCase());"
+        value="3. Affiche pays et capitale"
       />
       <input
-        list="text_1_cca2s_datalist"
-        name="texte1"
+        list="cca2_list"
+        name="cca2_input"
         type="text"
-        id="myTexte1"
+        id="cca2_input"
         value=""
+        onkeyup="populateDataList();"
       />
       <div id="result-find-country"></div>
-      <datalist id="text_1_cca2s_datalist"></datalist>
+      <datalist id="cca2_list"></datalist>
     </p>
 
     <p>
@@ -65,7 +68,8 @@
         <input name="bouton5" type="button" id="mybouton5" onClick="afficheSVGCliquable('exemple.svg', 'title');"
             value="5. SVG cliquable" />
     </p>
-    <div id="world-map">
+
+    <p id="world-map">
         <b>Bouton 6</b> : affiche carte<br />
         <input
             name="btn6"
@@ -74,9 +78,9 @@
             onClick="printWorldMap();"
             value="6. Afficher carte"
         />
-    </div>
+    </p>
 
-    <div id="world-map">
+    <p id="world-map">
         <b>Bouton 7</b> : rendre carte cliquable<br />
         <input
             name="btn7"
@@ -85,9 +89,9 @@
             onClick="makeWorldMapClickable();"
             value="7. Rendre carte cliquable"
         />
-    </div>
+    </p>
 
-    <div id="world-map">
+    <p id="world-map">
         <b>Bouton 8</b> : survol pays<br />
         <input
             name="btn8"
@@ -96,9 +100,9 @@
             onClick="hoverCountries();"
             value="8. Survoler carte"
         />
-    </div>
+    </p>
 
-    <p>Fichier � modifier/comp�lter</p>
+    <p>Fichier à modifier/compléter</p>
     <p>
       Remplace le texte "LES NOMS" avec le contenu du champ de saisi: <br />
       <input
@@ -111,7 +115,7 @@
       <input name="text" type="text" id="myText1" value="Toto" />
       <br /><br />
       Charge le fichier Employees.xml en ajax, cherche du contenu en javascript
-      et remplace le texte "LES NOMS" avec le sr�sultat
+      et remplace le texte "LES NOMS" avec les résultat
       <br />
       <input
         name="button2"
@@ -123,9 +127,9 @@
 
       <br />
       <br />
-      Charge me un fichier XML contenant des r�f�rences bibliographiques, une
+      Charge me un fichier XML contenant des références bibliographiques, une
       feuille de style, applique la feuille de stymle sur le fichier XML et
-      affiche le r�sultat en bas de la page:
+      affiche le résultat en bas de la page:
       <br />
       <input
         name="button3"
@@ -137,17 +141,17 @@
 
       <br />
       <br />
-      Charge me un fichier XML contenant des r�f�rences bibliographiques, une
-      feuille de style, r�cup�re le choix de type de bibliographie, le passe en
-      param�tre � la feuille de style, applique la feuille de stymle sur le
-      fichier XML et affiche le r�sultat en bas de la page:
+      Charge me un fichier XML contenant des références bibliographiques, une
+      feuille de style, récupère le choix de type de bibliographie, le passe en
+      paramètre à la feuille de style, applique la feuille de stymle sur le
+      fichier XML et affiche le résultat en bas de la page:
       <br />
-      <label for="cars">Type de r�f�rence biblio :</label>
+      <label for="cars">Type de référence biblio :</label>
 
       <select name="cars" id="type_ref_bibliographiques">
         <option value="Book">Livre</option>
         <option value="ArticleInJournal">Article dans un journal</option>
-        <option value="Proceedings">Article dans conf�rence</option>
+        <option value="Proceedings">Article dans conférence</option>
       </select>
       <br />
       <input
@@ -155,7 +159,7 @@
         type="button"
         id="myButton4"
         onClick="Bouton4_ajaxBibliographieAvecParametres('ajax.bib.xml','ajax.bibParam.xsl','element_a_recuperer', document.getElementById('type_ref_bibliographiques').value);"
-        value="4. AJAX avec ajax.bib.xml/ajax.bibParam.xsl et un param�tre"
+        value="4. AJAX avec ajax.bib.xml/ajax.bibParam.xsl et un paramètre"
       />
     </p>
     <div>
@@ -174,14 +178,14 @@
       </p>
     </div>
 
-
-
-    <svg id="svg-world-map" width="100%" height="100%" viewBox="0 0 1200 800"></svg>
-    <div id="countryName"></div>
-    <div id="table-country-desc">
-
-    <div id="texte_resultats" style="height: 90px;"></div>
-    <div id="resultats" style="width: 90%;"></div>
+    <div style="display: block;align-items: baseline;">
+        <div id="table-country-desc"></div>
+        <br>
+        <div id="countryName" style="color: red;"></div>
+        <br>
+        <svg id="svg-world-map" width="100%" height="100%" viewBox="0 0 1200 800"></svg>    
+        <div id="texte_resultats" style="height: 90px;"></div>
+        <div id="resultats" style="width: 90%;"></div>
     </div>
   </body>
 </html>
