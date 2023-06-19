@@ -70,6 +70,35 @@ function afficheSVGCliquable(svgDocumentUrl, baliseAffichage) {
   });
 }
 
+
+function showRandomCountry() {
+  var xmlDocument = chargerHttpXML("../../countriesTP.xml");
+  var countries = xmlDocument.getElementsByTagName("country");
+
+  // Sélectionne un pays aléatoire
+  var randomIndex = Math.floor(Math.random() * countries.length);
+  var country = countries[randomIndex];
+  var countryName = country.getElementsByTagName("common_name")[0].innerHTML;
+
+  // Affiche le nom du pays
+  document.getElementById("countryName").textContent = "Pays : " + countryName;
+
+  // Rend la carte cliquable
+  makeWorldMapClickable();
+
+  // Gère le clic sur la carte
+  document.getElementById("svg-world-map").onclick = function (event) {
+    var clickedCountry = event.target.getAttribute("id");
+    var countryCode = country.getElementsByTagName("cca2")[0].innerHTML;
+
+    // Vérifie si le pays cliqué correspond au pays aléatoire
+    var result = clickedCountry === countryCode;
+
+    // Affiche le résultat
+    document.getElementById("result").textContent = result ? "True" : "False";
+  };
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function recupererPremierEnfantDeTypeElement(n) {
