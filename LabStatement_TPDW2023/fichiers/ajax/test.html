@@ -1,0 +1,91 @@
+PartieAjaxDOM.html
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <title>TP 3IFA Ajax</title>
+
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta charset="UTF-8">
+    <meta name="author" content="Elöd EGYED-ZSIGMOND">
+
+    <script type="text/javascript" src="partieJavascript.js"></script>
+
+</head>
+
+<body>
+    <h1>TP 3IFA Partie Ajax</h1>
+    <h2>Louise PIETROPAOLI, Alexandre MARTIN (B3005)</h2>
+
+
+    <p>
+        <b>Bouton 1</b> : modifie la couleur de l'arrière plan de la page en bleu et la couleur du texte du bouton en
+        blanc.<br>
+        <input name="bouton1" type="button" id="mybouton1" onClick="bouton1();" value="1. Modification des couleurs" />
+    </p>
+    <p>
+        <b>Bouton 2</b> : remet les couleurs par défaut.<br>
+        <input name="bouton2" type="button" id="mybouton2" onClick="bouton2();"
+            value="2. Rétablissement des couleurs" />
+    </p>
+
+    <p>
+        <b>Bouton 3.1</b> : affiche pays et capitale (JS)<br>
+        <input name="bouton3_1" type="button" id="mybouton3_1"
+            onClick="bouton3_1(document.getElementById('myTexte1').value.toUpperCase());" value="3.1. --" />
+        <input list="text_1_cca2s_datalist" onkeyup="bouton3_autocompletion(document.getElementById('myTexte1'), document.getElementById('text_1_cca2s_datalist'))" name="texte1" type="text" id="myTexte1" value="" />
+        <datalist id="text_1_cca2s_datalist"></datalist>
+    </p>
+
+    <p>
+        <b>Bouton 3.2</b> : affiche pays et capitale (JS + XSL) et<br>
+        <b>Question 12</b> : affiche en vert les pays ayant une (ou des) langue commune avec le pays sélectionné.<br>
+
+        <input name="bouton3_2" type="button" id="mybouton3_2"
+            onClick="bouton3_2(document.getElementById('myTexte2').value.toUpperCase());" value="3.2. --" />
+        <input list="text_2_cca2s_datalist" onkeyup="bouton3_autocompletion(document.getElementById('myTexte2'), document.getElementById('text_2_cca2s_datalist'))" name="texte1" type="text" id="myTexte2" value="" />
+        <datalist id="text_2_cca2s_datalist"></datalist>
+    </p>
+
+    <p>
+        <b>Bouton 4</b> : chargement du exemple.svg.<br>
+        <input name="bouton4" type="button" id="mybouton4" onClick="afficheSVG('exemple.svg');"
+            value="4. Chargement du SVG" />
+    </p>
+
+    <p>
+        <b>Bouton 5</b> : exemple.svg cliquable.<br>
+        <input name="bouton5" type="button" id="mybouton5" onClick="afficheSVGCliquable('exemple.svg', 'title');"
+            value="5. SVG cliquable" />
+    </p>
+
+    <p>
+        <b>Bouton 6</b> : chargement de worldHigh.svg.<br>
+        <input name="bouton6" type="button" id="mybouton6" onClick="afficheSVG('worldHigh.svg');"
+            value="6. chargement de worldHigh.svg" />
+    </p>
+
+    <p>
+        <b>Bouton 7</b> : worldHigh.svg cliquable.<br>
+        <input name="bouton7" type="button" id="mybouton7"
+            onClick="afficheSVGCliquable('worldHigh.svg', 'countryname');" value="7. worldHigh.svg cliquable" />
+    </p>
+
+    <p>
+        <b>Bouton 8</b> : worldHigh.svg mouseover. Et autres améliorations (monnaie, population).<br>
+        <input name="bouton7" type="button" id="mybouton7" onClick="mouseoverSVG('worldHigh.svg');"
+            value="8. worldHigh.svg mouseover" />
+    </p>
+
+    <hr>
+    <div id="texte_resultats" style="height: 90px;"></div>
+    <div id="resultats" style="width: 90%;"></div>
+    <hr>
+
+
+
+    <hr>
+
+</body>
+
+</html>
